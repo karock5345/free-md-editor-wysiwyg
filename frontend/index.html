@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free MD Editor</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body class="light">
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button id="menuBtn" class="icon-btn menu-btn" title="Menu">☰</button>
+
+        <div class="brand-block">
+          <div class="brand">Free MD Editor</div>
+          <div class="subtitle">WYSIWYG Markdown desktop editor</div>
+        </div>
+
+        <div id="appMenu" class="app-menu" hidden>
+          <button id="menuNew">📄 New</button>
+          <button id="menuOpen">📂 Open</button>
+          <button id="menuSave">💾 Save</button>
+          <button id="menuSaveAs">🖫 Save As</button>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="file-meta">
+          <div id="docName">Untitled.md</div>
+          <div id="statusText">Starting…</div>
+        </div>
+
+        <div class="titlebar-tools">
+          <div class="zoom-group">
+            <button id="zoomOutBtn" class="icon-btn" title="Zoom out">A−</button>
+            <button id="zoomResetBtn" class="icon-btn" title="Reset zoom">100%</button>
+            <button id="zoomInBtn" class="icon-btn" title="Zoom in">A+</button>
+          </div>
+          <button id="themeBtn" class="icon-btn" title="Toggle light and dark mode">🌙</button>
+        </div>
+      </div>
+    </header>
+
+
+    
+    <nav class="toolbar">
+      <div class="tool-group">
+        <button data-cmd="undo" title="Undo">↶</button>
+        <button data-cmd="redo" title="Redo">↷</button>
+      </div>
+
+      <div class="tool-group">
+        <button id="findBtn" title="Find (Ctrl+F)">Find</button>
+        <button id="replaceBtn" title="Replace (Ctrl+H)">Replace</button>
+      </div>
+
+      <div class="tool-group">
+        <button id="plainBtn" title="Plain text">Plan</button>
+        <button data-block="P" title="Paragraph">¶</button>
+        <button data-block="H1" title="Heading 1">H1</button>
+        <button data-block="H2" title="Heading 2">H2</button>
+        <button data-block="H3" title="Heading 3">H3</button>
+        <button data-block="H4" title="Heading 4">H4</button>
+      </div>
+
+      <div class="tool-group">
+        <button data-cmd="bold" title="Bold"><strong>B</strong></button>
+        <button data-cmd="italic" title="Italic"><em>I</em></button>
+        <button data-cmd="strikeThrough" title="Strike"><s>S</s></button>
+        <button id="codeInlineBtn" title="Inline code">&lt;/&gt;</button>
+        <button id="codeBlockBtn" title="Code block">⌘</button>
+      </div>
+
+      <div class="tool-group">
+        <button data-cmd="insertUnorderedList" title="Bullets">• List</button>
+        <button data-cmd="insertOrderedList" title="Numbered">1.</button>
+        <button data-block="BLOCKQUOTE" title="Quote">❝</button>
+        <button id="hrBtn" title="Divider">―</button>
+        <button id="linkBtn" title="Link">🔗</button>
+        <button id="imageBtn" title="Insert Image">🖼</button>
+        <button id="tableBtn" title="Table">▦</button>
+        <button id="indentBtn" title="Indent">⇥</button>
+        <button id="outdentBtn" title="Outdent">⇤</button>
+      </div>
+
+      <div class="tool-group">
+        <button id="applyColorBtn" title="Apply selected color">🖍</button>
+        <label class="color-tool icon-btn" title="Choose color">
+          <span>🎨</span>
+          <input id="colorPicker" type="color" value="#ff9800" />
+        </label>
+      </div>
+    </nav>
+
+    <main class="editor-wrap">
+      <div id="editor" class="editor" contenteditable="true" spellcheck="false"></div>
+    </main>
+  </div>
+
+  <div id="findReplacePanel" class="find-panel" hidden>
+    <div class="find-panel__row">
+      <input id="findInput" type="text" placeholder="Find" />
+      <button id="findPrevBtn" title="Previous match">↑</button>
+      <button id="findNextBtn" title="Next match">↓</button>
+      <button id="findCloseBtn" title="Close">✕</button>
+    </div>
+
+    <div class="find-panel__row">
+      <input id="replaceInput" type="text" placeholder="Replace" />
+      <button id="replaceOneBtn" title="Replace current">Replace</button>
+      <button id="replaceAllBtn" title="Replace all">Replace All</button>
+    </div>
+
+    <div id="findStatus" class="find-panel__status">0 match</div>
+  </div>
+
+  <div id="tableContextMenu" class="context-menu" hidden>
+    <button data-table-action="row-above">Insert Row Above</button>
+    <button data-table-action="row-below">Insert Row Below</button>
+    <button data-table-action="row-delete">Delete Row</button>
+    <div class="context-menu__divider"></div>
+    <button data-table-action="col-left">Insert Column Left</button>
+    <button data-table-action="col-right">Insert Column Right</button>
+    <button data-table-action="col-delete">Delete Column</button>
+  </div>
+
+  <div id="imageContextMenu" class="context-menu" hidden>
+    <button data-image-action="remove">Remove Image</button>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
