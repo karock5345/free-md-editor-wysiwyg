@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"mime"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -64,12 +65,18 @@ func (a *App) domReady(ctx context.Context) {}
 
 // ReadFileAsDataURL reads a local file and returns it as a base64-encoded data URL
 // so the WebView can display images that are not reachable via http.
+// Relative paths are resolved against the currently opened markdown document.
 func (a *App) ReadFileAsDataURL(path string) (string, error) {
-	raw, err := os.ReadFile(path)
+	resolvedPath := a.resolveLocalAssetPath(path)
+	if strings.TrimSpace(resolvedPath) == "" {
+		return "", errors.New("image path is empty")
+	}
+
+	raw, err := os.ReadFile(resolvedPath)
 	if err != nil {
 		return "", fmt.Errorf("cannot read image: %w", err)
 	}
-	ext := strings.ToLower(filepath.Ext(path))
+	ext := strings.ToLower(filepath.Ext(resolvedPath))
 	mimeType := mime.TypeByExtension(ext)
 	if mimeType == "" {
 		mimeType = "image/png"
@@ -78,6 +85,47 @@ func (a *App) ReadFileAsDataURL(path string) (string, error) {
 		mimeType = strings.TrimSpace(mimeType[:idx])
 	}
 	return "data:" + mimeType + ";base64," + base64.StdEncoding.EncodeToString(raw), nil
+}
+
+func (a *App) resolveLocalAssetPath(path string) string {
+	trimmed := strings.TrimSpace(path)
+	if trimmed == "" {
+		return ""
+	}
+
+	if strings.HasPrefix(strings.ToLower(trimmed), "file://") {
+		parsed, err := url.Parse(trimmed)
+		if err == nil {
+			decodedPath := parsed.Path
+			if decoded, unescapeErr := url.PathUnescape(parsed.Path); unescapeErr == nil {
+				decodedPath = decoded
+			}
+
+			if len(decodedPath) >= 3 && decodedPath[0] == '/' && decodedPath[2] == ':' {
+				decodedPath = decodedPath[1:]
+			}
+
+			if parsed.Host != "" {
+				trimmed = "//" + parsed.Host + decodedPath
+			} else {
+				trimmed = decodedPath
+			}
+		}
+	} else if decoded, err := url.PathUnescape(trimmed); err == nil {
+		trimmed = decoded
+	}
+
+	normalized := filepath.FromSlash(trimmed)
+	if filepath.IsAbs(normalized) {
+		return filepath.Clean(normalized)
+	}
+
+	if strings.TrimSpace(a.currentFile) == "" {
+		return filepath.Clean(normalized)
+	}
+
+	baseDir := filepath.Dir(a.currentFile)
+	return filepath.Clean(filepath.Join(baseDir, normalized))
 }
 
 func (a *App) NewDocument() DocumentPayload {
