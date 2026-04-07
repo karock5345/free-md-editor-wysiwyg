@@ -7,7 +7,7 @@ A desktop Markdown editor built with Go + Wails that behaves more like a simple 
 - Markdown import/export for common structures
 - Windows and Linux desktop target
 
-![](D:\Projects\free-md-editor-wysiwyg\Screenshot02.png)
+![](Screenshot02.png)
 
 ## Requirements
 
