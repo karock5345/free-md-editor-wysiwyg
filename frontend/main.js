@@ -22,6 +22,7 @@ const themeBtn = document.getElementById("themeBtn");
 const zoomResetBtn = document.getElementById("zoomResetBtn");
 const appMenu = document.getElementById("appMenu");
 const menuBtn = document.getElementById("menuBtn");
+const topbar = document.querySelector(".topbar");
 const colorPicker = document.getElementById("colorPicker");
 const applyColorBtn = document.getElementById("applyColorBtn");
 
@@ -32,6 +33,7 @@ let currentTableCell = null;
 let currentImage = null;
 let savedRange = null;
 let currentChosenColor = localStorage.getItem("free-md-color") || "#ff9800";
+let layoutObserver = null;
 
 /* ---------------- helpers ---------------- */
 function escapeRegExp(text) {
@@ -1129,6 +1131,23 @@ async function saveFileAs() {
   }
 }
 
+function syncLayoutMetrics() {
+  if (!topbar) return;
+
+  const height = Math.ceil(topbar.getBoundingClientRect().height);
+  document.documentElement.style.setProperty("--topbar-height", `${height}px`);
+}
+
+function bindLayoutMetrics() {
+  syncLayoutMetrics();
+  window.addEventListener("resize", syncLayoutMetrics);
+
+  if (typeof ResizeObserver !== "undefined" && topbar) {
+    layoutObserver = new ResizeObserver(syncLayoutMetrics);
+    layoutObserver.observe(topbar);
+  }
+}
+
 /* ---------------- bindings ---------------- */
 
 function bindToolbar() {
@@ -1456,6 +1475,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   applyTheme(currentTheme);
   applyZoom(zoomLevel);
   setChosenColor(currentChosenColor);
+  bindLayoutMetrics();
   bindToolbar();
   bindMenu();
   bindEditor();

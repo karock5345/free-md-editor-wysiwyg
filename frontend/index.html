@@ -44,19 +44,19 @@
 
 
     
-    <nav class="toolbar">
+    <nav class="toolbar" aria-label="Editor toolbar">
       <div class="tool-group">
         <button data-cmd="undo" title="Undo">↶</button>
         <button data-cmd="redo" title="Redo">↷</button>
       </div>
 
       <div class="tool-group">
-        <button id="findBtn" title="Find (Ctrl+F)">Find</button>
-        <button id="replaceBtn" title="Replace (Ctrl+H)">Replace</button>
+        <button id="findBtn" title="Find (Ctrl+F)" aria-label="Find">⌕</button>
+        <button id="replaceBtn" title="Replace (Ctrl+H)" aria-label="Replace">⇄</button>
       </div>
 
       <div class="tool-group">
-        <button id="plainBtn" title="Plain text">Plan</button>
+        <button id="plainBtn" title="Plain text" aria-label="Plain text">Tx</button>
         <button data-block="P" title="Paragraph">¶</button>
         <button data-block="H1" title="Heading 1">H1</button>
         <button data-block="H2" title="Heading 2">H2</button>
@@ -73,7 +73,7 @@
       </div>
 
       <div class="tool-group">
-        <button data-cmd="insertUnorderedList" title="Bullets">• List</button>
+        <button data-cmd="insertUnorderedList" title="Bullets" aria-label="Bullets">•</button>
         <button data-cmd="insertOrderedList" title="Numbered">1.</button>
         <button data-block="BLOCKQUOTE" title="Quote">❝</button>
         <button id="hrBtn" title="Divider">―</button>
