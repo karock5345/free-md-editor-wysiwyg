@@ -1290,6 +1290,16 @@ function bindMenu() {
     appMenu.hidden = true;
   });
 
+  document.getElementById("menuFind")?.addEventListener("click", () => {
+    openFindPanel(false);
+    appMenu.hidden = true;
+  });
+
+  document.getElementById("menuReplace")?.addEventListener("click", () => {
+    openFindPanel(true);
+    appMenu.hidden = true;
+  });
+
   document.addEventListener("click", (e) => {
     if (appMenu && !appMenu.contains(e.target) && e.target !== menuBtn) {
       appMenu.hidden = true;
